@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-// import { Banner, BannerDescription, BannerDivider, BannerLink, BannerTitle } from "./banner";
+import { Banner, BannerDescription, BannerDivider, BannerLink, BannerTitle } from "./banner";
 import { Link, type LinkProps } from "@/components/ui/link";
 import { Footer } from "./footer";
 import { Header } from "./header";
@@ -21,12 +21,12 @@ export function LayoutCentered({ children }: { children: React.ReactNode }) {
       <SkipToContent href={`#${contentId}`}>Skip to content</SkipToContent>
 
       {/* Banner */}
-      {/*<Banner isDismissable={true}>
+      <Banner isDismissable={true}>
         <BannerTitle>Lorem ipsum dolor sit amet</BannerTitle>
         <BannerDivider />
         <BannerDescription>consectetur adipisicing elit ipsa laudantium</BannerDescription>
         <BannerLink href="/">Call to action</BannerLink>
-      </Banner>*/}
+      </Banner>
 
       {/* Header */}
       <Header narrow={true} />
