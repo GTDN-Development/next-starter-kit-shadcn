@@ -5,6 +5,8 @@ import { Logo } from "@/components/ui/logo";
 import { ArrowUpIcon } from "lucide-react";
 import { NavLink } from "@/components/ui/nav-link";
 import { Container } from "@/components/ui/container";
+import { ThemeSwitcher } from "../theme-switcher";
+import { SocialMediaIcons } from "../social-media-icons";
 
 export function Footer(props: React.ComponentProps<"footer">) {
   return (
@@ -12,10 +14,12 @@ export function Footer(props: React.ComponentProps<"footer">) {
       <Container>
         <div className="grid min-w-0 gap-16 py-16 lg:grid-cols-7 2xl:gap-32">
           {/* Brand section */}
-          <div className="flex min-w-0 flex-col items-start justify-start gap-4 sm:gap-6 lg:col-span-2">
+          <div className="flex min-w-0 flex-col items-start justify-start gap-6 lg:col-span-2">
             <Link href="/" aria-label="Home Page">
               <Logo aria-hidden="true" className="w-20" />
             </Link>
+            <ThemeSwitcher />
+            <SocialMediaIcons />
             <ScrollToTopButton className="mt-auto" />
           </div>
         </div>
@@ -38,7 +42,7 @@ function Copyright({
 }) {
   return (
     <p {...props} className={clsx("text-text-subtle text-sm", props.className)}>
-      Copyright &copy;&nbsp;{new Date().getFullYear()}&nbsp;{company}
+      Copyright &copy;&nbsp;{new Date().getFullYear()}&nbsp;{company}. All rights reserved.
     </p>
   );
 }

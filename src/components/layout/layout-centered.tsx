@@ -29,7 +29,7 @@ export function LayoutCentered({ children }: { children: React.ReactNode }) {
       </Banner>*/}
 
       {/* Header */}
-      <Header position="sticky" autoHide={true} narrow={true} />
+      <Header narrow={true} />
 
       {/* Main content */}
       <main id={contentId} data-slot="main" className="min-w-0">

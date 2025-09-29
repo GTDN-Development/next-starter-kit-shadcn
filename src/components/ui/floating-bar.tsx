@@ -1,27 +1,39 @@
 "use client";
 
-import clsx from "clsx";
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
 import { useEffect, useRef, useState } from "react";
 
-export type FloatingBarBaseProps = {
-  position?: "sticky" | "fixed";
-  autoHide?: boolean;
-  scrolledThreshold?: number;
-  autoHideThreshold?: number;
-};
+import { cn } from "@/lib/utils";
 
-export type FloatingBarProps<T extends React.ElementType = "div"> = FloatingBarBaseProps & {
-  as?: T;
-} & React.ComponentPropsWithoutRef<T>;
+const floatingBarVariants = cva("top-0 isolate", {
+  variants: {
+    position: {
+      sticky: "sticky",
+      fixed: "fixed",
+    },
+  },
+  defaultVariants: {
+    position: "sticky",
+  },
+});
 
-export function FloatingBar<T extends React.ElementType = "div">({
-  as,
-  position = "sticky",
+function FloatingBar({
+  className,
+  position,
   autoHide,
   scrolledThreshold = 64,
   autoHideThreshold = 512,
+  asChild = false,
   ...props
-}: FloatingBarProps<T>) {
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof floatingBarVariants> & {
+    autoHide?: boolean;
+    scrolledThreshold?: number;
+    autoHideThreshold?: number;
+    asChild?: boolean;
+  }) {
   const [isHidden, setIsHidden] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -66,14 +78,16 @@ export function FloatingBar<T extends React.ElementType = "div">({
     };
   }, [autoHide, isSticky, isFixed, autoHideThreshold, scrolledThreshold]);
 
-  const Element = as || "div";
+  const Comp = asChild ? Slot : "div";
 
   return (
-    <Element
+    <Comp
       {...props}
       data-scrolled={isScrolled ? "true" : undefined}
       data-hidden={isHidden ? "true" : undefined}
-      className={clsx(props.className, "top-0 isolate", isSticky ? "sticky" : "fixed")}
+      className={cn(floatingBarVariants({ position, className }))}
     />
   );
 }
+
+export { FloatingBar, floatingBarVariants };

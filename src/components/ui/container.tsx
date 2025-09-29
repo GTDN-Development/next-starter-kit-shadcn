@@ -1,37 +1,35 @@
-import clsx from "clsx";
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
 
-export const styles = {
-  base: "mx-auto w-[min(var(--container-max-width),100%---spacing(12))]",
-  size: {
-    sm: "[--container-max-width:50rem]",
-    default: "[--container-max-width:90rem]",
-    prose: "[--container-max-width:65ch]",
-    fluid: "[--container-max-width:100%]",
+import { cn } from "@/lib/utils";
+
+const containerVariants = cva("mx-auto w-[min(var(--container-max-width),100%---spacing(12))]", {
+  variants: {
+    size: {
+      sm: "[--container-max-width:50rem]",
+      default: "[--container-max-width:90rem]",
+      prose: "[--container-max-width:65ch]",
+      fluid: "[--container-max-width:100%]",
+    },
   },
-};
+  defaultVariants: {
+    size: "default",
+  },
+});
 
-export type ContainerBaseProps = {
-  size?: keyof typeof styles.size;
-};
-
-export type ContainerProps<T extends React.ElementType> = React.ComponentPropsWithoutRef<T> &
-  ContainerBaseProps & {
-    as?: T;
-    ref?: React.Ref<HTMLDivElement>;
-  };
-
-export function Container<T extends React.ElementType = "div">({
-  as,
-  size = "default",
-  ref,
+function Container({
+  className,
+  size,
+  asChild = false,
   ...props
-}: ContainerProps<T>) {
-  const Element = as || "div";
-  return (
-    <Element
-      {...props}
-      ref={ref}
-      className={clsx(styles.base, styles.size[size], props.className)}
-    />
-  );
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof containerVariants> & {
+    asChild?: boolean;
+  }) {
+  const Comp = asChild ? Slot : "div";
+
+  return <Comp className={cn(containerVariants({ size, className }))} {...props} />;
 }
+
+export { Container, containerVariants };
