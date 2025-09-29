@@ -20,14 +20,20 @@ export function Footer(props: React.ComponentProps<"footer">) {
             </Link>
             <ThemeSwitcher />
             <SocialMediaIcons />
-            <ScrollToTopButton className="mt-auto" />
           </div>
         </div>
 
         {/* Metadata footer section */}
-        <div className="border-t-border flex min-w-0 flex-wrap items-start justify-between gap-6 border-t py-12 sm:items-center">
-          <Copyright company="gtdn.online" />
-          <AgencyCredit />
+        <div className="border-t-border flex min-w-0 flex-col flex-wrap items-start justify-between gap-6 border-t py-10 sm:flex-row sm:items-center">
+          <div className="flex flex-1 items-center">
+            <Copyright company="gtdn.online" />
+          </div>
+          <div className="flex flex-1 items-center sm:justify-center">
+            <AgencyCredit />
+          </div>
+          <div className="flex flex-1 items-center sm:justify-end">
+            <ScrollToTopButton className="mt-auto" />
+          </div>
         </div>
       </Container>
     </footer>

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -36,6 +36,7 @@ function FloatingBar({
   }) {
   const [isHidden, setIsHidden] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const isSticky = position === "sticky";
   const isFixed = position === "fixed";
@@ -43,8 +44,13 @@ function FloatingBar({
   // previous scroll position
   const prevScrollY = useRef(0);
 
+  // Set mounted state to prevent hydration mismatch
   useEffect(() => {
-    if (!(isSticky || isFixed)) return;
+    setIsMounted(true);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!(isSticky || isFixed) || !isMounted) return;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -71,20 +77,21 @@ function FloatingBar({
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
+    // Only call handleScroll after component is mounted to prevent hydration mismatch
     handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [autoHide, isSticky, isFixed, autoHideThreshold, scrolledThreshold]);
+  }, [autoHide, isSticky, isFixed, autoHideThreshold, scrolledThreshold, isMounted]);
 
   const Comp = asChild ? Slot : "div";
 
   return (
     <Comp
       {...props}
-      data-scrolled={isScrolled ? "true" : undefined}
-      data-hidden={isHidden ? "true" : undefined}
+      data-scrolled={isMounted && isScrolled ? "true" : undefined}
+      data-hidden={isMounted && isHidden ? "true" : undefined}
       className={cn(floatingBarVariants({ position, className }))}
     />
   );
