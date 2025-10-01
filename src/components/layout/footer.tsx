@@ -3,10 +3,10 @@ import { chain } from "@/lib/utils";
 import clsx from "clsx";
 import { Logo } from "@/components/ui/logo";
 import { ArrowUpIcon } from "lucide-react";
-import { NavLink } from "@/components/ui/nav-link";
+import { NavLink } from "@/components/layout/nav-link";
 import { Container } from "@/components/ui/container";
-import { ThemeSwitcher } from "../theme-switcher";
-import { SocialMediaIcons } from "../social-media-icons";
+import { ThemeSwitcher } from "./theme-switcher";
+import { SocialMediaIcons } from "./social-media-icons";
 
 export function Footer(props: React.ComponentProps<"footer">) {
   return (
@@ -18,6 +18,9 @@ export function Footer(props: React.ComponentProps<"footer">) {
             <Link href="/" aria-label="Home Page">
               <Logo aria-hidden="true" className="w-20" />
             </Link>
+            <p className="text-sm">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, nesciunt.
+            </p>
             <ThemeSwitcher />
             <SocialMediaIcons />
           </div>

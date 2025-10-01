@@ -6,6 +6,9 @@ import { XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+// This dialog has implemented scroll  behavior in y axis in case there is overflowing content
+// -> default shadcn dialog does not have this implemented
+
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
@@ -30,7 +33,7 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 grid grid-rows-[1fr_auto_3fr] place-items-center overflow-y-auto bg-black/50 pt-8 pb-12",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 grid grid-rows-[1fr_auto_3fr] place-items-center overflow-y-auto bg-black/50 pt-10 pb-12",
         className
       )}
       {...props}

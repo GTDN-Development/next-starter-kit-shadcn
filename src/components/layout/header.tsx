@@ -1,30 +1,29 @@
 import clsx from "clsx";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { FloatingBar } from "@/components/ui/floating-bar";
+  MobileMenu,
+  MobileMenuClose,
+  MobileMenuContent,
+  MobileMenuFooter,
+  MobileMenuHeader,
+  MobileMenuNested,
+  MobileMenuTitle,
+  MobileMenuTrigger,
+} from "./mobile-menu";
+import { FloatingBar } from "@/components/layout/floating-bar";
 import { Link } from "@/components/ui//link";
 import { Container } from "@/components/ui/container";
-import { MenuIcon, ChevronDownIcon } from "lucide-react";
+import { MenuIcon, ChevronDownIcon, ChevronRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import { NavLink } from "@/components/ui/nav-link";
+import { NavLink } from "@/components/layout/nav-link";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { type NavigationItem, type NavigationDropdown } from "@/config/navigation";
+import { SocialMediaIcons } from "./social-media-icons";
 
 // Type guard to check if an item is a dropdown
 function isDropdown(item: NavigationItem): item is NavigationDropdown {
@@ -34,90 +33,85 @@ function isDropdown(item: NavigationItem): item is NavigationDropdown {
 // Navigation component that renders nav items
 function Navigation({ items }: { items: NavigationItem[] }) {
   return (
-    <NavigationMenu viewport={false}>
-      <NavigationMenuList>
-        {items.map((item, index) => {
-          if (isDropdown(item)) {
-            return (
-              <NavigationMenuItem key={index}>
-                <NavigationMenuTrigger className="text-muted-foreground hover:text-foreground data-[state=open]:text-foreground text-sm transition-colors">
-                  {item.name}
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid min-w-max">
-                    {item.items.map((subItem) => (
-                      <li key={subItem.href}>
-                        <NavigationMenuLink asChild>
-                          <NavLink
-                            href={subItem.href}
-                            className="hover:bg-accent block w-full rounded-sm px-3 py-2 text-sm"
-                          >
-                            {subItem.name}
-                          </NavLink>
-                        </NavigationMenuLink>
-                      </li>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            );
-          } else {
-            return (
-              <NavigationMenuItem key={index}>
-                <NavigationMenuLink asChild>
-                  <NavLink
-                    href={item.href}
-                    className="text-muted-foreground hover:text-foreground data-[current=true]:text-foreground inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors"
-                  >
+    <ul className="flex items-center gap-6">
+      {items.map((item, index) => {
+        if (isDropdown(item)) {
+          return (
+            <DropdownMenu key={index}>
+              <DropdownMenuTrigger asChild>
+                <li>
+                  <button className="text-muted-foreground hover:text-foreground data-[state=open]:text-foreground flex items-center gap-2 text-sm font-medium transition-colors">
                     {item.name}
-                  </NavLink>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            );
-          }
-        })}
-      </NavigationMenuList>
-    </NavigationMenu>
+                    <ChevronDownIcon className="size-4" />
+                  </button>
+                </li>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                {item.items.map((subItem) => (
+                  <DropdownMenuItem key={subItem.href} asChild>
+                    <NavLink href={subItem.href} className="w-full cursor-pointer">
+                      {subItem.name}
+                    </NavLink>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        } else {
+          return (
+            <li key={index}>
+              <NavLink
+                href={item.href}
+                className="text-muted-foreground hover:text-foreground data-current:text-foreground inline-flex items-center justify-center rounded-md text-sm font-medium underline-offset-2 transition-colors data-current:underline"
+              >
+                {item.name}
+              </NavLink>
+            </li>
+          );
+        }
+      })}
+    </ul>
   );
 }
 
 // Mobile navigation component for the drawer
 function MobileNavigation({ items }: { items: NavigationItem[] }) {
   return (
-    <ul className="divide-muted flex flex-col divide-y">
+    <ul className="divide-border flex flex-col divide-y">
       {items.map((item, index) => {
         if (isDropdown(item)) {
           return (
-            <li key={index} className="py-2">
-              <Collapsible>
-                <CollapsibleTrigger asChild>
-                  <button className="text-foreground flex w-full items-center justify-between gap-3 font-medium">
+            <li key={index} className="py-3">
+              <MobileMenuNested>
+                <MobileMenuTrigger asChild>
+                  <button className="text-foreground flex w-full items-center justify-between gap-3">
                     {item.name}
-                    <ChevronDownIcon aria-hidden="true" className="size-[1em]" />
+                    <ChevronRightIcon aria-hidden="true" className="size-[1em]" />
                   </button>
-                </CollapsibleTrigger>
-                <CollapsibleContent asChild>
-                  <ul className="flex flex-col gap-2 pt-4">
-                    {item.items.map((subItem, index) => (
-                      <li key={index}>
-                        <NavLink key={subItem.href} href={subItem.href} className="font-medium">
-                          {subItem.name}
-                        </NavLink>
-                      </li>
-                    ))}
-                  </ul>
-                </CollapsibleContent>
-              </Collapsible>
+                </MobileMenuTrigger>
+                <MobileMenuContent>
+                  <div className="mx-auto w-full max-w-xl">
+                    <MobileMenuHeader>
+                      <MobileMenuTitle>{item.name}</MobileMenuTitle>
+                    </MobileMenuHeader>
+                    <ul className="divide-border flex flex-col divide-y p-4">
+                      {item.items.map((subItem, index) => (
+                        <li key={index} className="py-3">
+                          <NavLink key={subItem.href} href={subItem.href}>
+                            {subItem.name}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </MobileMenuContent>
+              </MobileMenuNested>
             </li>
           );
         } else {
           return (
-            <li key={index} className="py-2">
-              <NavLink
-                key={item.href}
-                href={item.href}
-                className="text-foreground w-full font-medium"
-              >
+            <li key={index} className="py-3">
+              <NavLink key={item.href} href={item.href} className="text-foreground w-full">
                 {item.name}
               </NavLink>
             </li>
@@ -167,34 +161,37 @@ export function Header({
 
           {/* Right side */}
           <div className="flex flex-1 items-center justify-end gap-4">
-            <div className="ml-auto hidden lg:block">
+            <nav className="ml-auto hidden lg:block">
               <Navigation items={navigation} />
-            </div>
+            </nav>
 
             {/* Mobile menu */}
             <div className="lg:hidden">
-              <Drawer>
-                <DrawerTrigger asChild>
+              <MobileMenu>
+                <MobileMenuTrigger asChild>
                   <Button variant="secondary" size="icon" aria-label="open menu">
                     <MenuIcon aria-hidden="true" />
                   </Button>
-                </DrawerTrigger>
-                <DrawerContent>
-                  <div className="mx-auto w-full max-w-lg">
-                    <DrawerHeader>
-                      <DrawerTitle className="text-left">Menu</DrawerTitle>
-                    </DrawerHeader>
+                </MobileMenuTrigger>
+                <MobileMenuContent>
+                  <div className="mx-auto w-full max-w-xl">
+                    <MobileMenuHeader>
+                      <MobileMenuTitle>Menu</MobileMenuTitle>
+                    </MobileMenuHeader>
                     <div className="space-y-6 p-4">
                       <MobileNavigation items={navigation} />
+                      <SocialMediaIcons />
                     </div>
-                    <DrawerFooter>
-                      <DrawerClose asChild>
-                        <Button className="w-full">Close</Button>
-                      </DrawerClose>
-                    </DrawerFooter>
+                    <MobileMenuFooter>
+                      <MobileMenuClose asChild>
+                        <Button variant="ghost" size="lg" className="w-full">
+                          Close menu
+                        </Button>
+                      </MobileMenuClose>
+                    </MobileMenuFooter>
                   </div>
-                </DrawerContent>
-              </Drawer>
+                </MobileMenuContent>
+              </MobileMenu>
             </div>
           </div>
         </Container>

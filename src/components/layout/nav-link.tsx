@@ -1,6 +1,6 @@
 "use client";
 
-import { Link, type LinkProps } from "./link";
+import { Link, type LinkProps } from "../ui/link";
 import { usePathname } from "next/navigation";
 import { ArrowUpRightIcon } from "lucide-react";
 
