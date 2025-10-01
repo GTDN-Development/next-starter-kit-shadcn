@@ -20,7 +20,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { CheckCircleIcon, AlertCircleIcon, Loader2Icon } from "lucide-react";
+import { legalLinks } from "@/config/legal-links";
+
+import { cn } from "@/lib/utils";
 
 const contactFormSchema = z.object({
   name: z
@@ -65,7 +68,7 @@ const contactFormSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
 
-export function ContactForm() {
+export function ContactForm({ className, ...props }: React.ComponentProps<"div">) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     type: "success" | "error" | null;
@@ -122,10 +125,10 @@ export function ContactForm() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl">
+    <div {...props} className={cn("@container", className)}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 @lg:grid-cols-2">
             <FormField
               control={form.control}
               name="name"
@@ -176,7 +179,7 @@ export function ContactForm() {
               <FormItem>
                 <FormLabel>Phone Number *</FormLabel>
                 <FormControl>
-                  <Input type="tel" placeholder="+1 123 456 789" {...field} />
+                  <Input type="tel" placeholder="+420 123 456 789" {...field} />
                 </FormControl>
                 <FormDescription>
                   Phone number for potential clarification of your inquiry.
@@ -193,11 +196,7 @@ export function ContactForm() {
               <FormItem>
                 <FormLabel>Message *</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="Write your message or inquiry..."
-                    className="min-h-[120px]"
-                    {...field}
-                  />
+                  <Textarea placeholder="Write your message or inquiry..." rows={6} {...field} />
                 </FormControl>
                 <FormDescription>Describe how we can help you.</FormDescription>
                 <FormMessage />
@@ -216,7 +215,7 @@ export function ContactForm() {
                 <div className="space-y-1 leading-none">
                   <FormLabel>
                     I agree to the{" "}
-                    <Link href="/gdpr" className="underline hover:no-underline">
+                    <Link href={legalLinks.gdpr.href} className="underline hover:no-underline">
                       processing of personal data
                     </Link>{" "}
                     *
@@ -230,9 +229,9 @@ export function ContactForm() {
           {submitStatus.type && (
             <Alert variant={submitStatus.type === "error" ? "destructive" : "default"}>
               {submitStatus.type === "success" ? (
-                <CheckCircle className="h-4 w-4" />
+                <CheckCircleIcon aria-hidden="true" className="size-4" />
               ) : (
-                <AlertCircle className="h-4 w-4" />
+                <AlertCircleIcon aria-hidden="true" className="size-4" />
               )}
               <AlertTitle>{submitStatus.type === "success" ? "Success!" : "Error!"}</AlertTitle>
               <AlertDescription>{submitStatus.message}</AlertDescription>
@@ -240,7 +239,9 @@ export function ContactForm() {
           )}
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isSubmitting && (
+              <Loader2Icon aria-hidden="true" className="mr-2 size-4 animate-spin" />
+            )}
             {isSubmitting ? "Sending..." : "Send Message"}
           </Button>
         </form>

@@ -15,10 +15,6 @@ export const navLinks = {
     name: "Home",
     href: "/",
   },
-  gdpr: {
-    name: "Gdpr",
-    href: "/gdpr",
-  },
   about: {
     name: "About",
     href: "/about",
@@ -37,27 +33,6 @@ export const navLinks = {
       {
         name: "Consulting",
         href: "/services/consulting",
-      },
-      {
-        name: "Support",
-        href: "/services/support",
-      },
-    ],
-  },
-  products: {
-    name: "Products",
-    items: [
-      {
-        name: "SaaS Platform",
-        href: "/products/saas-platform",
-      },
-      {
-        name: "API Tools",
-        href: "/products/api-tools",
-      },
-      {
-        name: "Analytics",
-        href: "/products/analytics",
       },
     ],
   },

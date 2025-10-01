@@ -1,27 +1,100 @@
 import Link from "next/link";
-import { chain } from "@/lib/utils";
-import clsx from "clsx";
 import { Logo } from "@/components/ui/logo";
 import { ArrowUpIcon } from "lucide-react";
 import { NavLink } from "@/components/layout/nav-link";
 import { Container } from "@/components/ui/container";
 import { ThemeSwitcher } from "./theme-switcher";
 import { SocialMediaIcons } from "./social-media-icons";
+import { type NavigationItem, type NavigationDropdown, navLinksArray } from "@/config/nav-links";
+import { legalLinksArray } from "@/config/legal-links";
+import { Separator } from "../ui/separator";
+
+import { chain, cn } from "@/lib/utils";
+
+// Type guard to check if an item is a dropdown
+function isDropdown(item: NavigationItem): item is NavigationDropdown {
+  return "items" in item;
+}
+
+function FooterNavigation({ items }: { items: NavigationItem[] }) {
+  return (
+    <ul className="flex flex-col gap-2">
+      {items.map((item, index) => {
+        if (isDropdown(item)) {
+          return (
+            <li key={index}>
+              <div className="space-y-2">
+                <p className="text-sm font-medium">{item.name}</p>
+                <ul className="space-y-2 pl-2">
+                  {item.items.map((subItem) => (
+                    <li key={subItem.href}>
+                      <NavLink
+                        href={subItem.href}
+                        className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                      >
+                        {subItem.name}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          );
+        } else {
+          return (
+            <li key={index}>
+              <NavLink
+                href={item.href}
+                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              >
+                {item.name}
+              </NavLink>
+            </li>
+          );
+        }
+      })}
+    </ul>
+  );
+}
 
 export function Footer(props: React.ComponentProps<"footer">) {
   return (
-    <footer {...props} className={clsx("border-t-border border-t", props.className)}>
+    <footer {...props} className={cn("border-t-border border-t", props.className)}>
       <Container>
-        <div className="grid min-w-0 gap-16 py-16 lg:grid-cols-7 2xl:gap-32">
+        <div className="grid gap-x-10 gap-y-16 py-16 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand section */}
-          <div className="flex min-w-0 flex-col items-start justify-start gap-6 lg:col-span-2">
+          <div className="flex flex-col items-start justify-start gap-7">
             <Link href="/" aria-label="Home Page">
               <Logo aria-hidden="true" className="w-20" />
             </Link>
             <p className="text-sm">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, nesciunt.
             </p>
+            <Separator />
             <ThemeSwitcher />
+          </div>
+
+          <div className="flex flex-col items-start justify-start gap-7">
+            <p className="text-sm font-semibold">Navigation</p>
+            <FooterNavigation items={navLinksArray} />
+          </div>
+          <div className="flex flex-col items-start justify-start gap-7">
+            <p className="text-sm font-semibold">Legal</p>
+            <ul className="flex flex-col gap-2">
+              {legalLinksArray.map((item, index) => (
+                <li key={index}>
+                  <NavLink
+                    href={item.href}
+                    className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                  >
+                    {item.name}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex flex-col items-start justify-start gap-6">
+            <p className="text-sm font-semibold">Social media</p>
             <SocialMediaIcons />
           </div>
         </div>
@@ -50,7 +123,7 @@ function Copyright({
   company?: string;
 }) {
   return (
-    <p {...props} className={clsx("text-text-subtle text-sm", props.className)}>
+    <p {...props} className={cn("text-text-subtle text-sm", props.className)}>
       Copyright &copy;&nbsp;{new Date().getFullYear()}&nbsp;{company}. All rights reserved.
     </p>
   );
@@ -61,7 +134,7 @@ function ScrollToTopButton(props: React.ComponentProps<"button">) {
     <button
       {...props}
       onClick={chain(props.onClick, () => window.scrollTo({ top: 0, behavior: "smooth" }))}
-      className={clsx(
+      className={cn(
         "cursor-pointer text-sm underline decoration-current/20 decoration-1 underline-offset-2 hover:decoration-current/60",
         props.className
       )}
@@ -73,7 +146,7 @@ function ScrollToTopButton(props: React.ComponentProps<"button">) {
 
 function AgencyCredit(props: React.ComponentProps<"p">) {
   return (
-    <p {...props} className={clsx("text-sm", props.className)}>
+    <p {...props} className={cn("text-sm", props.className)}>
       <span>Created by </span>
       <NavLink
         href="https://www.gtdn.online/"

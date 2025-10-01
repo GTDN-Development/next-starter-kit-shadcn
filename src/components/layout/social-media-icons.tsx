@@ -4,7 +4,10 @@ import { Button } from "../ui/button";
 
 export function SocialMediaIcons(props: React.ComponentProps<"ul">) {
   return (
-    <ul {...props} className={cn("flex items-center justify-between gap-4", props.className)}>
+    <ul
+      {...props}
+      className={cn("flex flex-wrap items-center justify-between gap-2", props.className)}
+    >
       {socialMediaLinksArray.map((item, index) => (
         <li key={index}>
           <Button size="icon" variant="ghost" asChild>

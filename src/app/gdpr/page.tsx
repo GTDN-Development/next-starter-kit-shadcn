@@ -15,7 +15,7 @@ export default function Page() {
         </HeroContent>
       </Hero>
 
-      <Container size="prose" className="prose pb-24">
+      <Container size="sm" className="prose pb-24">
         <GdprPolicyStatement
           company={{
             name: legal.legalName,
