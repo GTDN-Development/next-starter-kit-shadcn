@@ -25,7 +25,7 @@ function FooterNavigation({ items }: { items: NavigationItem[] }) {
           return (
             <li key={index}>
               <Collapsible className="w-full space-y-2">
-                <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 text-sm font-medium">
+                <CollapsibleTrigger className="flex w-full items-center justify-start gap-3 text-sm font-medium">
                   {item.name}
                   <ChevronDownIcon aria-hidden="true" className="size-4" />
                 </CollapsibleTrigger>
@@ -67,7 +67,7 @@ export function Footer(props: React.ComponentProps<"footer">) {
   return (
     <footer {...props} className={cn("border-t-border border-t", props.className)}>
       <Container>
-        <div className="grid gap-x-10 gap-y-16 py-16 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-x-32 gap-y-16 py-16 lg:grid-cols-3 xl:gap-x-52">
           {/* Brand section */}
           <div className="flex flex-col items-start justify-start gap-7">
             <Link href="/" aria-label="Home Page">
@@ -80,28 +80,32 @@ export function Footer(props: React.ComponentProps<"footer">) {
             <ThemeSwitcher />
           </div>
 
-          <div className="flex flex-col items-start justify-start gap-7">
-            <p className="text-sm font-semibold">Navigation</p>
-            <FooterNavigation items={navLinksArray} />
-          </div>
-          <div className="flex flex-col items-start justify-start gap-7">
-            <p className="text-sm font-semibold">Legal</p>
-            <ul className="flex flex-col gap-2">
-              {legalLinksArray.map((item, index) => (
-                <li key={index}>
-                  <NavLink
-                    href={item.href}
-                    className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-                  >
-                    {item.name}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex flex-col items-start justify-start gap-6">
-            <p className="text-sm font-semibold">Social media</p>
-            <SocialMediaIcons />
+          <div className="grid gap-y-16 sm:grid-cols-2 md:grid-cols-3 lg:col-span-2">
+            <div className="flex flex-col items-start justify-start gap-7">
+              <p className="text-sm font-semibold">Navigation</p>
+              <FooterNavigation items={navLinksArray} />
+            </div>
+
+            <div className="flex flex-col items-start justify-start gap-7">
+              <p className="text-sm font-semibold">Legal</p>
+              <ul className="flex flex-col gap-2">
+                {legalLinksArray.map((item, index) => (
+                  <li key={index}>
+                    <NavLink
+                      href={item.href}
+                      className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+                    >
+                      {item.name}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-col items-start justify-start gap-6">
+              <p className="text-sm font-semibold">Social media</p>
+              <SocialMediaIcons />
+            </div>
           </div>
         </div>
 
