@@ -1,3 +1,4 @@
+import type { NavigationLink } from "./nav-links";
 import {
   FacebookIcon,
   GitHubIcon,
@@ -7,7 +8,11 @@ import {
   SpotifyIcon,
 } from "@/components/ui/icon-brand";
 
-export const socialMedia = {
+export type SocialMediaLink = NavigationLink & {
+  icon: React.ComponentType<{ className?: string }>;
+};
+
+export const socialMediaLinks = {
   facebook: {
     name: "Facebook",
     href: "https://www.facebook.com/user-name/",
@@ -38,4 +43,6 @@ export const socialMedia = {
     href: "https://github.com/user-name",
     icon: GitHubIcon,
   },
-};
+} as const satisfies Record<string, SocialMediaLink>;
+
+export const socialMediaLinksArray: SocialMediaLink[] = Object.values(socialMediaLinks);

@@ -22,7 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { type NavigationItem, type NavigationDropdown } from "@/config/navigation";
+import { type NavigationItem, type NavigationDropdown } from "@/config/nav-links";
 import { SocialMediaIcons } from "./social-media-icons";
 
 // Type guard to check if an item is a dropdown
@@ -81,10 +81,10 @@ function MobileNavigation({ items }: { items: NavigationItem[] }) {
       {items.map((item, index) => {
         if (isDropdown(item)) {
           return (
-            <li key={index} className="py-3">
+            <li key={index}>
               <MobileMenuNested>
                 <MobileMenuTrigger asChild>
-                  <button className="text-foreground flex w-full items-center justify-between gap-3">
+                  <button className="text-foreground flex w-full items-center justify-between gap-3 py-3">
                     {item.name}
                     <ChevronRightIcon aria-hidden="true" className="size-[1em]" />
                   </button>
@@ -94,12 +94,18 @@ function MobileNavigation({ items }: { items: NavigationItem[] }) {
                     <MobileMenuHeader>
                       <MobileMenuTitle>{item.name}</MobileMenuTitle>
                     </MobileMenuHeader>
-                    <ul className="divide-border flex flex-col divide-y p-4">
+                    <ul className="divide-border flex flex-col divide-y">
                       {item.items.map((subItem, index) => (
-                        <li key={index} className="py-3">
-                          <NavLink key={subItem.href} href={subItem.href}>
-                            {subItem.name}
-                          </NavLink>
+                        <li key={index}>
+                          <MobileMenuClose asChild>
+                            <NavLink
+                              key={subItem.href}
+                              href={subItem.href}
+                              className="text-foreground block w-full py-3"
+                            >
+                              {subItem.name}
+                            </NavLink>
+                          </MobileMenuClose>
                         </li>
                       ))}
                     </ul>
@@ -110,10 +116,16 @@ function MobileNavigation({ items }: { items: NavigationItem[] }) {
           );
         } else {
           return (
-            <li key={index} className="py-3">
-              <NavLink key={item.href} href={item.href} className="text-foreground w-full">
-                {item.name}
-              </NavLink>
+            <li key={index}>
+              <MobileMenuClose asChild>
+                <NavLink
+                  key={item.href}
+                  href={item.href}
+                  className="text-foreground block w-full py-3"
+                >
+                  {item.name}
+                </NavLink>
+              </MobileMenuClose>
             </li>
           );
         }
@@ -174,17 +186,15 @@ export function Header({
                   </Button>
                 </MobileMenuTrigger>
                 <MobileMenuContent>
-                  <div className="mx-auto w-full max-w-xl">
-                    <MobileMenuHeader>
-                      <MobileMenuTitle>Menu</MobileMenuTitle>
-                    </MobileMenuHeader>
-                    <div className="space-y-6 p-4">
-                      <MobileNavigation items={navigation} />
-                      <SocialMediaIcons />
-                    </div>
+                  <MobileMenuHeader>
+                    <MobileMenuTitle>Menu</MobileMenuTitle>
+                  </MobileMenuHeader>
+                  <div className="space-y-6">
+                    <MobileNavigation items={navigation} />
+                    <SocialMediaIcons />
                     <MobileMenuFooter>
                       <MobileMenuClose asChild>
-                        <Button variant="ghost" size="lg" className="w-full">
+                        <Button variant="secondary" size="lg" className="w-full">
                           Close menu
                         </Button>
                       </MobileMenuClose>

@@ -5,7 +5,7 @@ import { Banner, BannerDescription, BannerDivider, BannerLink, BannerTitle } fro
 import { Link, type LinkProps } from "@/components/ui/link";
 import { Footer } from "./footer";
 import { Header } from "./header";
-import { navigation } from "@/config/navigation";
+import { navLinksArray } from "@/config/nav-links";
 
 // Main Layout Component
 export function LayoutCentered({ children }: { children: React.ReactNode }) {
@@ -30,7 +30,7 @@ export function LayoutCentered({ children }: { children: React.ReactNode }) {
       </Banner>
 
       {/* Header */}
-      <Header narrow={true} navigation={navigation} />
+      <Header narrow={true} navigation={navLinksArray} />
 
       {/* Main content */}
       <main id={contentId} data-slot="main" className="min-w-0">

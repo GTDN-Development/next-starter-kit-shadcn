@@ -8,7 +8,7 @@ const containerVariants = cva("mx-auto w-[min(var(--container-max-width),100%---
   variants: {
     size: {
       sm: "[--container-max-width:50rem]",
-      default: "[--container-max-width:90rem]",
+      default: "[--container-max-width:80rem]",
       prose: "[--container-max-width:65ch]",
       fluid: "[--container-max-width:100%]",
     },
@@ -31,5 +31,10 @@ function Container({
 
   return <Comp className={cn(containerVariants({ size, className }))} {...props} />;
 }
+
+export type ContainerProps<T extends React.ElementType = "div"> = React.ComponentProps<T> &
+  VariantProps<typeof containerVariants> & {
+    asChild?: boolean;
+  };
 
 export { Container, containerVariants };

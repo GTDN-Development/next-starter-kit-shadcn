@@ -10,16 +10,20 @@ export type NavigationDropdown = {
 
 export type NavigationItem = NavigationLink | NavigationDropdown;
 
-export const navigation: NavigationItem[] = [
-  {
+export const navLinks = {
+  home: {
     name: "Home",
     href: "/",
   },
-  {
+  gdpr: {
+    name: "Gdpr",
+    href: "/gdpr",
+  },
+  about: {
     name: "About",
     href: "/about",
   },
-  {
+  services: {
     name: "Services",
     items: [
       {
@@ -40,7 +44,7 @@ export const navigation: NavigationItem[] = [
       },
     ],
   },
-  {
+  products: {
     name: "Products",
     items: [
       {
@@ -57,12 +61,14 @@ export const navigation: NavigationItem[] = [
       },
     ],
   },
-  {
+  blog: {
     name: "Blog",
     href: "/blog",
   },
-  {
+  contact: {
     name: "Contact",
     href: "/contact",
   },
-];
+} as const satisfies Record<string, NavigationItem>;
+
+export const navLinksArray: NavigationItem[] = Object.values(navLinks);
