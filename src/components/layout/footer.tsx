@@ -11,6 +11,7 @@ import { legalLinksArray } from "@/config/legal-links";
 
 import { chain, cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import { site } from "@/config/site";
 
 // Type guard to check if an item is a dropdown
 function isDropdown(item: NavigationItem): item is NavigationDropdown {
@@ -19,13 +20,13 @@ function isDropdown(item: NavigationItem): item is NavigationDropdown {
 
 function FooterNavigation({ items }: { items: NavigationItem[] }) {
   return (
-    <ul className="flex w-full flex-col gap-2">
+    <ul className="flex flex-col gap-2">
       {items.map((item, index) => {
         if (isDropdown(item)) {
           return (
             <li key={index}>
-              <Collapsible className="w-full space-y-2">
-                <CollapsibleTrigger className="flex w-full items-center justify-start gap-3 text-sm font-medium">
+              <Collapsible className="space-y-2">
+                <CollapsibleTrigger className="flex items-center justify-start gap-3 text-sm font-medium">
                   {item.name}
                   <ChevronDownIcon aria-hidden="true" className="size-4" />
                 </CollapsibleTrigger>
@@ -112,7 +113,7 @@ export function Footer(props: React.ComponentProps<"footer">) {
         {/* Metadata footer section */}
         <div className="border-t-border flex min-w-0 flex-col flex-wrap items-start justify-between gap-6 border-t py-10 sm:flex-row sm:items-center">
           <div className="flex flex-1 items-center">
-            <Copyright company="gtdn.online" />
+            <Copyright company={site.name} />
           </div>
           <div className="flex flex-1 items-center sm:justify-center">
             <AgencyCredit />

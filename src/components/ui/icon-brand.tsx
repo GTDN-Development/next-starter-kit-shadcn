@@ -1,12 +1,12 @@
 // Icons are ported from: https://fontawesome.com/search?o=r&ic=brands&ip=brands
 
-export type BrandIconProps = React.HTMLAttributes<SVGElement>;
+export type IconBrandProps = React.HTMLAttributes<SVGElement>;
 
-function resolveClassName(props: BrandIconProps) {
+function resolveClassName(props: IconBrandProps) {
   return `${props.className || "size-5"}`;
 }
 
-export function AppleIcon(props: BrandIconProps) {
+export function AppleIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -21,7 +21,7 @@ export function AppleIcon(props: BrandIconProps) {
   );
 }
 
-export function BehanceIcon(props: BrandIconProps) {
+export function BehanceIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -36,7 +36,7 @@ export function BehanceIcon(props: BrandIconProps) {
   );
 }
 
-export function BlueskyIcon(props: BrandIconProps) {
+export function BlueskyIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -51,7 +51,7 @@ export function BlueskyIcon(props: BrandIconProps) {
   );
 }
 
-export function DiscordIcon(props: BrandIconProps) {
+export function DiscordIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -66,7 +66,7 @@ export function DiscordIcon(props: BrandIconProps) {
   );
 }
 
-export function DribbbleIcon(props: BrandIconProps) {
+export function DribbbleIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -81,7 +81,7 @@ export function DribbbleIcon(props: BrandIconProps) {
   );
 }
 
-export function FacebookIcon(props: BrandIconProps) {
+export function FacebookIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -96,7 +96,7 @@ export function FacebookIcon(props: BrandIconProps) {
   );
 }
 
-export function FigmaIcon(props: BrandIconProps) {
+export function FigmaIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -111,7 +111,7 @@ export function FigmaIcon(props: BrandIconProps) {
   );
 }
 
-export function GitHubIcon(props: BrandIconProps) {
+export function GitHubIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -126,7 +126,7 @@ export function GitHubIcon(props: BrandIconProps) {
   );
 }
 
-export function GoogleIcon(props: BrandIconProps) {
+export function GoogleIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -141,7 +141,7 @@ export function GoogleIcon(props: BrandIconProps) {
   );
 }
 
-export function InstagramIcon(props: BrandIconProps) {
+export function InstagramIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -156,7 +156,7 @@ export function InstagramIcon(props: BrandIconProps) {
   );
 }
 
-export function KickstarterIcon(props: BrandIconProps) {
+export function KickstarterIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -171,7 +171,7 @@ export function KickstarterIcon(props: BrandIconProps) {
   );
 }
 
-export function LinkedInIcon(props: BrandIconProps) {
+export function LinkedInIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -186,7 +186,7 @@ export function LinkedInIcon(props: BrandIconProps) {
   );
 }
 
-export function MessengerIcon(props: BrandIconProps) {
+export function MessengerIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -201,7 +201,7 @@ export function MessengerIcon(props: BrandIconProps) {
   );
 }
 
-export function MetaIcon(props: BrandIconProps) {
+export function MetaIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -216,7 +216,7 @@ export function MetaIcon(props: BrandIconProps) {
   );
 }
 
-export function PatreonIcon(props: BrandIconProps) {
+export function PatreonIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -231,7 +231,7 @@ export function PatreonIcon(props: BrandIconProps) {
   );
 }
 
-export function PinterestIcon(props: BrandIconProps) {
+export function PinterestIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -246,7 +246,7 @@ export function PinterestIcon(props: BrandIconProps) {
   );
 }
 
-export function ProductHuntIcon(props: BrandIconProps) {
+export function ProductHuntIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -261,7 +261,7 @@ export function ProductHuntIcon(props: BrandIconProps) {
   );
 }
 
-export function RedditIcon(props: BrandIconProps) {
+export function RedditIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -276,7 +276,7 @@ export function RedditIcon(props: BrandIconProps) {
   );
 }
 
-export function SlackIcon(props: BrandIconProps) {
+export function SlackIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -291,7 +291,7 @@ export function SlackIcon(props: BrandIconProps) {
   );
 }
 
-export function SoundcloudIcon(props: BrandIconProps) {
+export function SoundcloudIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -306,7 +306,7 @@ export function SoundcloudIcon(props: BrandIconProps) {
   );
 }
 
-export function SpotifyIcon(props: BrandIconProps) {
+export function SpotifyIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -321,7 +321,7 @@ export function SpotifyIcon(props: BrandIconProps) {
   );
 }
 
-export function TelegramIcon(props: BrandIconProps) {
+export function TelegramIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -336,7 +336,7 @@ export function TelegramIcon(props: BrandIconProps) {
   );
 }
 
-export function TiktokIcon(props: BrandIconProps) {
+export function TiktokIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -351,7 +351,7 @@ export function TiktokIcon(props: BrandIconProps) {
   );
 }
 
-export function TwitterXIcon(props: BrandIconProps) {
+export function TwitterXIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -366,7 +366,7 @@ export function TwitterXIcon(props: BrandIconProps) {
   );
 }
 
-export function WhatsappIcon(props: BrandIconProps) {
+export function WhatsappIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -381,7 +381,7 @@ export function WhatsappIcon(props: BrandIconProps) {
   );
 }
 
-export function YoutubeIcon(props: BrandIconProps) {
+export function YoutubeIcon(props: IconBrandProps) {
   return (
     <svg
       {...props}
@@ -396,7 +396,7 @@ export function YoutubeIcon(props: BrandIconProps) {
   );
 }
 
-export const BrandIcon = {
+export const IconBrand = {
   apple: AppleIcon,
   behance: BehanceIcon,
   bluesky: BlueskyIcon,

@@ -6,6 +6,8 @@ import { Link, type LinkProps } from "@/components/ui/link";
 import { Footer } from "./footer";
 import { Header } from "./header";
 import { navLinksArray } from "@/config/nav-links";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "../ui/button";
 
 // Main Layout Component
 export function LayoutCentered({ children }: { children: React.ReactNode }) {
@@ -47,8 +49,9 @@ function SkipToContent({ children, className, ...props }: LinkProps) {
   return (
     <Link
       {...props}
-      className={clsx(
-        "bg-primary text-primary-foreground fixed top-6 left-6 z-1000 hidden -translate-y-[1000%] rounded-md px-5 py-2.5 text-base font-bold focus-visible:translate-y-0 pointer-fine:block",
+      className={cn(
+        buttonVariants({ variant: "default" }),
+        "fixed top-6 left-6 z-1000 hidden -translate-y-[1000%] focus-visible:translate-y-0 pointer-fine:block",
         className
       )}
     >

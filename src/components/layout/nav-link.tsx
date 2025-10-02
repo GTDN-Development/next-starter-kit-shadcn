@@ -13,8 +13,8 @@ export function NavLink({
   ...props
 }: LinkProps & { showExternalIcon?: boolean }) {
   const pathname = usePathname();
+  const isExternal = typeof href === "string" && href.startsWith("http");
   const isCurrent = pathname === href;
-  const isExternal = href.startsWith("http");
 
   return (
     <Link
@@ -23,8 +23,8 @@ export function NavLink({
       aria-current={isCurrent ? "page" : undefined}
       data-current={isCurrent ? "true" : undefined}
       data-external={isExternal ? "true" : undefined}
-      target={isExternal ? target || "_blank" : undefined}
-      rel={isExternal ? rel || "noopener noreferrer" : undefined}
+      target={isExternal ? target || "_blank" : target}
+      rel={isExternal ? rel || "noopener noreferrer" : rel}
     >
       {children}
       {isExternal && showExternalIcon && (

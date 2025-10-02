@@ -8,9 +8,9 @@ export default function Page() {
     <div>
       <Hero>
         <HeroContent>
-          <HeroTitle>Ochrana osobních údajů (GDPR)</HeroTitle>
+          <HeroTitle>Privacy Policy</HeroTitle>
           <HeroDescription>
-            Informace o zpracování osobních údajů v souladu s nařízením GDPR
+            Information about the processing of personal data in accordance with the GDPR regulation
           </HeroDescription>
         </HeroContent>
       </Hero>

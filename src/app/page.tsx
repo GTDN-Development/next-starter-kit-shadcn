@@ -1,12 +1,23 @@
 import { ContactForm } from "@/components/home-page/contact-form";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { Hero, HeroActions, HeroContent, HeroDescription, HeroTitle } from "@/components/ui/hero";
+import {
+  Hero,
+  HeroActions,
+  HeroBackground,
+  HeroBackgroundGrid,
+  HeroContent,
+  HeroDescription,
+  HeroTitle,
+} from "@/components/ui/hero";
 
 export default function Page() {
   return (
     <div>
       <Hero>
+        <HeroBackground>
+          <HeroBackgroundGrid />
+        </HeroBackground>
         <HeroContent>
           <HeroTitle>Home page</HeroTitle>
           <HeroDescription>

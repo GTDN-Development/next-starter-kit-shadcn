@@ -152,7 +152,7 @@ export function Header({
         // Transition and initial state
         "transform-gpu transition duration-300",
         // Initial state
-        "bg-background",
+        "bg-transparent",
         // Scrolled state - when the user starts scrolling
         "data-scrolled:bg-background/75 data-scrolled:backdrop-blur-2xl",
         // Hidden state for auto-hide behavior
