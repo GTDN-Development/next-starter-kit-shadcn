@@ -135,7 +135,7 @@ export function CookieSettingsDialog() {
               <Link
                 href={legalLinks.cookies.href}
                 target="_blank"
-                rel="noopenner noreferrer"
+                rel="noopener noreferrer"
                 className="text-foreground underline"
               >
                 cookies policy.

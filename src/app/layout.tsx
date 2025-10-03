@@ -1,12 +1,15 @@
 import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "@/components/layout/providers";
 import { LayoutCentered } from "@/components/layout/layout-centered";
 import { ThirdPartyScripts } from "@/components/cookies/third-party-scripts";
+import { DynamicScripts } from "@/components/cookies/dynamic-scripts";
 import { CookieConsentBanner } from "@/components/cookies/cookie-consent-banner";
 import { CookieSettingsDialog } from "@/components/cookies/cookie-settings-dialog";
+import { CookieErrorBoundary } from "@/components/cookies/cookie-error-boundary";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,14 +55,19 @@ export default function RootLayout({
           <div className="relative isolate">
             <LayoutCentered>{children}</LayoutCentered>
           </div>
-          <CookieConsentBanner />
-          <CookieSettingsDialog />
+          <CookieErrorBoundary>
+            <CookieConsentBanner />
+            <CookieSettingsDialog />
+            <DynamicScripts />
+          </CookieErrorBoundary>
           <TailwindScreen />
           <Toaster />
-
-          {/*Load scripts that are controlled by our cookie consent settings.*/}
-          <ThirdPartyScripts />
         </Providers>
+
+        {/*Load scripts that are controlled by our cookie consent settings.*/}
+        <Suspense fallback={null}>
+          <ThirdPartyScripts />
+        </Suspense>
       </body>
     </html>
   );

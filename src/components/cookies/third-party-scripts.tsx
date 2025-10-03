@@ -1,26 +1,16 @@
-"use client";
-
-import { useCookieContext } from "./cookie-context";
+import { getConsent } from "./server-utils";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
-export function ThirdPartyScripts() {
-  const { hasConsentedTo } = useCookieContext();
+export async function ThirdPartyScripts() {
+  const consent = await getConsent();
 
-  const siteHasGa =
-    process.env.NEXT_PUBLIC_GA_ID === undefined || process.env.NEXT_PUBLIC_GA_ID === null;
-
-  const siteHasGtm =
-    process.env.NEXT_PUBLIC_GTM_ID === undefined || process.env.NEXT_PUBLIC_GTM_ID === null;
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
   return (
     <>
-      {hasConsentedTo("analytics") && siteHasGa && (
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? "G-YOUR_ID_HERE"} />
-      )}
-
-      {hasConsentedTo("analytics") && siteHasGtm && (
-        <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-YOUR_ID_HERE"} />
-      )}
+      {consent.analytics && gaId && <GoogleAnalytics gaId={gaId} />}
+      {consent.analytics && gtmId && <GoogleTagManager gtmId={gtmId} />}
     </>
   );
 }

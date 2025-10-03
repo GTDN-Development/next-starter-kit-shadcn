@@ -2,10 +2,11 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-const STORAGE_KEY = "cookie_consent";
+const COOKIE_NAME = "cookie_consent";
+const COOKIE_MAX_AGE = 365 * 24 * 60 * 60; // 1 year in seconds
 
 // Enable logging of the current state and always display the consent banner
-const ENABLE_DEBUG_MODE = false;
+const DEBUG_MODE = false;
 
 type ConsentState = {
   necessary: boolean;
@@ -44,31 +45,43 @@ const initialConsent: ConsentState = {
   marketing: false,
 };
 
-function getFromLocalStorage(key: string, defaultValue: ConsentState): ConsentState {
+function getConsentFromCookie(): ConsentState | null {
   if (typeof document === "undefined") {
-    return defaultValue;
+    return null;
   }
 
   try {
-    const item = window.localStorage.getItem(key);
-    return item ? JSON.parse(item) : defaultValue;
+    const cookies = document.cookie.split("; ");
+    const consentCookie = cookies.find((c) => c.startsWith(`${COOKIE_NAME}=`));
+
+    if (!consentCookie) {
+      return null;
+    }
+
+    const value = consentCookie.split("=")[1];
+    return JSON.parse(decodeURIComponent(value));
   } catch (error) {
-    console.error("Error reading from localStorage:", error);
-    return defaultValue;
+    console.error("Error reading consent cookie:", error);
+    return null;
   }
 }
 
-function setToLocalStorage(key: string, value: ConsentState): void {
+function setConsentCookie(consent: ConsentState): void {
   if (typeof document === "undefined") {
     return;
   }
 
   try {
-    window.localStorage.setItem(key, JSON.stringify(value));
+    const value = encodeURIComponent(JSON.stringify(consent));
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${COOKIE_NAME}=${value}; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax${secure}`;
   } catch (error) {
-    console.error("Error writing to localStorage:", error);
+    console.error("Error setting consent cookie:", error);
   }
 }
+
+// For safety the cookie consent works normally in production
+const ENABLE_DEBUG_MODE = process.env.NODE_ENV === "development" && DEBUG_MODE;
 
 export function CookieContextProvider({ children }: { children: ReactNode }) {
   const [consent, setConsent] = useState<ConsentState>(initialConsent);
@@ -77,10 +90,13 @@ export function CookieContextProvider({ children }: { children: ReactNode }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
-    const storedConsent = getFromLocalStorage(STORAGE_KEY, initialConsent);
-    const hasStored =
-      typeof document !== "undefined" && window.localStorage.getItem(STORAGE_KEY) !== null;
-    setConsent(storedConsent);
+    const storedConsent = getConsentFromCookie();
+    const hasStored = storedConsent !== null;
+
+    if (hasStored) {
+      setConsent(storedConsent);
+    }
+
     setHasInteracted(ENABLE_DEBUG_MODE ? false : hasStored);
     setIsMounted(true);
   }, []);
@@ -103,7 +119,7 @@ export function CookieContextProvider({ children }: { children: ReactNode }) {
 
   function saveConsent(consentToSave?: ConsentState) {
     const finalConsent = consentToSave || consent;
-    setToLocalStorage(STORAGE_KEY, finalConsent);
+    setConsentCookie(finalConsent);
     setConsent(finalConsent);
     setHasInteracted(true);
   }
