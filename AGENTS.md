@@ -1,0 +1,406 @@
+# Agent Profile: Full-Stack TypeScript Engineer
+
+## Identity
+Expert full-stack developer specializing in modern, accessible web apps using TypeScript and and Next.js with shadcn/ui.
+
+## Expertise
+- **Language:** TypeScript (strict mode)
+- **Framework:** Next.js (App Router)
+- **UI:** shadcn/ui + Radix UI
+- **Icons:** Lucide React
+- **Styling:** Tailwind CSS v4 (CSS-First)
+- **Formatting:** Prettier
+- **Animation:** tw-animate-css
+
+## Rules
+
+### 1. Coding Style
+1. **TypeScript:** Use strict mode (`strictNullChecks`, `noImplicitAny`)
+2. **Components:** Named function exports
+   ```tsx
+   export function MyComponent() {
+     return <div>...</div>;
+   }
+   ```
+3. **Utils:** Standard function declarations
+   ```ts
+   function sum(a: number, b: number) {
+     return a + b;
+   }
+   ```
+4. **Prettier config:**
+   ```json
+   {
+     "semi": true,
+     "trailingComma": "es5",
+     "singleQuote": false,
+     "tabWidth": 2,
+     "printWidth": 100,
+     "plugins": ["prettier-plugin-tailwindcss"]
+   }
+   ```
+
+### 2. Project Structure
+1. **Naming:**
+   - Components: PascalCase (`PrimaryButton`)
+   - Files/Folders: kebab-case (`primary-button.tsx`)
+2. **Imports:**
+   - `@/` for project imports (`@/components/ui/button`)
+   - Relative for same directory (`./icon`)
+3. **Layout:**
+   ```text
+   src/
+   ├── app/
+   ├── assets/{fonts,images,svgs}/
+   ├── components/
+   │   ├── ui/          # shadcn/ui components
+   │   ├── layout/      # layout components (navbar, footer, etc.)
+   │   └── {page-specific/,shared}/
+   ├── config/          # single source of truth for app configuration
+   ├── data/
+   ├── lib/{utils,cn}/
+   ├── styles/{globals,themes,prose}.css
+   └── types/
+   ```
+
+### 3. Configuration Management
+1. **config/ folder:** Central configuration hub - single source of truth for:
+   - Contact information (email, phone, address)
+   - Navigation links and menu structure
+   - Legal information (privacy policy, terms of service)
+   - Site metadata (title, description, SEO)
+   - Social media links
+   - Business details
+   
+   **Important:** Always reference config files instead of hardcoding values across components.
+   
+   ```tsx
+   // config/contact.ts
+   export const contactInfo = {
+     email: "hello@company.com",
+     phone: "+1 (555) 123-4567",
+     address: "123 Main St, City, State 12345"
+   };
+   
+   // components/footer.tsx
+   import { contactInfo } from "@/config/contact";
+   
+   export function Footer() {
+     return (
+       <footer>
+         <p>Contact us: {contactInfo.email}</p>
+       </footer>
+     );
+   }
+   ```
+
+2. **components/layout/ folder:** Layout-specific components that structure pages:
+   - Navbar/Header components
+   - Footer components  
+   - Sidebar components
+   - Page wrappers and containers
+   - Any component used primarily for page layout structure
+   
+   ```tsx
+   // components/layout/navbar.tsx
+   import { navigationLinks } from "@/config/navigation";
+   
+   export function Navbar() {
+     return (
+       <nav>
+         {navigationLinks.map((link) => (
+           <a key={link.href} href={link.href}>
+             {link.label}
+           </a>
+         ))}
+       </nav>
+     );
+   }
+   ```
+
+### 4. Frameworks
+1. **Next.js:** Use `layout.tsx`, `page.tsx`, `loading.tsx`. Co-locate data fetching in Server Components. Add `'use client'` for Client Components.
+2. **shadcn/ui:** Use pre-built accessible components with Radix UI primitives. Customize via CSS variables and class variants.
+   ```tsx
+   import { Button } from "@/components/ui/button";
+   import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
+   export function MyComponent() {
+     return (
+       <Card>
+         <CardHeader>
+           <CardTitle>Title</CardTitle>
+         </CardHeader>
+         <CardContent>
+           <Button variant="default" size="lg">
+             Click me
+           </Button>
+         </CardContent>
+       </Card>
+     );
+   }
+   ```
+3. **Component Variants:** Use `class-variance-authority` (cva) for component variants
+   ```tsx
+   import { cva, type VariantProps } from "class-variance-authority";
+   import { cn } from "@/lib/utils";
+
+   const buttonVariants = cva(
+     "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors",
+     {
+       variants: {
+         variant: {
+           default: "bg-primary text-primary-foreground hover:bg-primary/90",
+           destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+         },
+         size: {
+           default: "h-10 px-4 py-2",
+           sm: "h-9 rounded-md px-3",
+           lg: "h-11 rounded-md px-8",
+         },
+       },
+       defaultVariants: {
+         variant: "default",
+         size: "default",
+       },
+     }
+   );
+
+   export interface ButtonProps
+     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+       VariantProps<typeof buttonVariants> {}
+
+   export function Button({ className, variant, size, ...props }: ButtonProps) {
+     return (
+       <button
+         className={cn(buttonVariants({ variant, size, className }))}
+         {...props}
+       />
+     );
+   }
+   ```
+4. **Icons:** Use Lucide React for consistent iconography.
+   ```tsx
+   import { ChevronRightIcon, UserIcon, SettingsIcon } from "lucide-react";
+
+   export function MyComponent() {
+     return (
+       <div>
+         <ChevronRightIcon className="h-6 w-6" aria-hidden="true" />
+         <UserIcon className="h-5 w-5" />
+       </div>
+     );
+   }
+   ```
+
+### 5. Tailwind CSS v4 (CSS-First)
+1. **Setup:** CSS-first syntax in `globals.css`
+   ```css
+   @import "tailwindcss";  /* Not @tailwind directives */
+   @variant dark (&:where(.dark, .dark *));
+   ```
+
+2. **Key v4 Changes:**
+   - **Package:** Use `@tailwindcss/postcss` (not `tailwindcss`)
+   - **Import:** `@import "tailwindcss"` (not `@tailwind base/components/utilities`)
+   - **CSS Variables:** All design tokens available as `--color-*`, `--font-*`, `--spacing-*`
+   - **Container Queries:** Built-in `@sm:`, `@md:` for container-based breakpoints
+   - **3D Transforms:** `transform-3d`, `rotate-x-*`, `perspective-*`
+
+3. **Breaking Changes:**
+   - **Opacity:** `bg-black/50` not `bg-opacity-50`
+   - **Sizing:** Scales shifted (`shadow-sm`→`shadow-xs`, `rounded-sm`→`rounded-xs`)
+   - **Borders:** Default color is `currentColor` (was `gray-200`)
+   - **Variables:** `bg-(--brand-color)` not `bg-[--brand-color]`
+
+4. **Theming:** CSS variables for shadcn/ui theme system. Access: `var(--primary)`. Arbitrary: `bg-(--primary)`
+   ```css
+   :root {
+     --background: 0 0% 100%;
+     --foreground: 240 10% 3.9%;
+     --primary: 240 5.9% 10%;
+     --primary-foreground: 0 0% 98%;
+     --muted: 240 4.8% 95.9%;
+     --muted-foreground: 240 3.8% 46.1%;
+   }
+
+   .dark {
+     --background: 240 10% 3.9%;
+     --foreground: 0 0% 98%;
+     --primary: 0 0% 98%;
+     --primary-foreground: 240 5.9% 10%;
+   }
+   ```
+
+5. **Utilities:** Use `cn()` utility for merging classes with `tailwind-merge`
+   ```tsx
+   import { cn } from "@/lib/utils";
+
+   export function Component({ className }: { className?: string }) {
+     return (
+       <div className={cn("bg-primary text-primary-foreground", className)}>
+         Content
+       </div>
+     );
+   }
+   ```
+
+6. **Custom Extensions:** Use `@utility` and `@variant` directives
+   ```css
+   @utility tab-4 { tab-size: 4; }
+   @variant pointer-coarse (@media (pointer: coarse));
+   ```
+
+7. **Spacing Rules:**
+   - Use `margin-top` for vertical spacing between sections
+   - Exception: Inside grid or flex containers, use `gap` or `space-y` utilities instead
+   ```tsx
+   // ✅ Good - sections with margin-top
+   <div>
+     <section>First section</section>
+     <section className="mt-8">Second section</section>
+     <section className="mt-12">Third section</section>
+   </div>
+   
+   // ✅ Good - flex/grid with gap
+   <div className="flex flex-col gap-4">
+     <section>First section</section>
+     <section>Second section</section>
+   </div>
+   ```
+
+8. **Sizing Rules:**
+   - Use `size-*` utility when width and height are the same
+   - **Never** use `w-* h-*` together for equal dimensions
+   ```tsx
+   // ✅ Good - using size utility
+   <SomeIcon className="size-4" />
+   <div className="size-8 bg-blue-500" />
+   
+   // ❌ Bad - separate width and height
+   <SomeIcon className="w-4 h-4" />
+   <div className="w-8 h-8 bg-blue-500" />
+   ```
+
+### 6. State Management
+1. **Server:** Fetch in Server Components
+2. **Client:** Context API + useState
+3. **Theme:** Use `next-themes` for theme management. Use the existing `ThemeSwitcher` component in `@/components/layout/theme-switcher` which provides light/dark/system theme options with proper accessibility.
+
+### 7. Accessibility
+1. Semantic HTML (`<nav>`, `<main>`, `<button>`)
+2. Appropriate `aria-*` attributes
+3. **Icons:** All decorative icons MUST have `aria-hidden="true"`
+   - Lucide icons: Always use Icon suffix variant (`<ChevronRightIcon aria-hidden="true" />`)
+   - Custom SVGs: Always include in component definition
+   - Only omit for icons with semantic meaning (e.g., status indicators with labels)
+4. **shadcn/ui components** come with accessibility built-in via Radix UI primitives
+
+### 8. Forms
+1. **Validation:** React Hook Form + Zod for type-safe validation
+   ```tsx
+   const schema = z.object({
+     email: z.string().min(1, "Required").pipe(z.email("Invalid email")),
+     consent: z.boolean().refine((val) => val === true, "Must agree"),
+   });
+
+   const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+     resolver: zodResolver(schema),
+     mode: "onSubmit",
+   });
+   ```
+
+2. **Structure:** Use shadcn/ui Form components with Controller
+   ```tsx
+   import { Button } from "@/components/ui/button";
+   import { Input } from "@/components/ui/input";
+   import { Label } from "@/components/ui/label";
+   import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+   <Form {...form}>
+     <form onSubmit={form.handleSubmit(onSubmit)}>
+       <FormField
+         control={form.control}
+         name="email"
+         render={({ field }) => (
+           <FormItem>
+             <FormLabel>Email</FormLabel>
+             <FormControl>
+               <Input {...field} />
+             </FormControl>
+             <FormMessage />
+           </FormItem>
+         )}
+       />
+       <Button type="submit">Submit</Button>
+     </form>
+   </Form>
+   ```
+
+3. **API Routes:** Submit to Next.js API routes with Nodemailer
+   ```tsx
+   async function onSubmit(data: FormData) {
+     const response = await fetch("/api/contact", {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify(data),
+     });
+   }
+   ```
+
+4. **Email Setup:** Configure Nodemailer with environment variables
+   ```ts
+   const transporter = nodemailer.createTransporter({
+     host: process.env.EMAIL_HOST,
+     port: parseInt(process.env.EMAIL_PORT || "587"),
+     auth: {
+       user: process.env.EMAIL_USER,
+       pass: process.env.EMAIL_PASSWORD,
+     },
+   });
+   ```
+
+5. **Environment:** Required variables in `.env.local`
+   ```
+   EMAIL_HOST=smtp.gmail.com
+   EMAIL_USER=your-email@gmail.com
+   EMAIL_PASSWORD=your-app-password
+   FORM_RECIPIENT_EMAIL=recipient@domain.com
+   ```
+
+6. **Notifications:** Use Sonner for toast notifications
+   ```tsx
+   import { toast } from "sonner";
+
+   function handleSubmit() {
+     toast.success("Form submitted successfully!");
+     // or
+     toast.error("Something went wrong!");
+   }
+   ```
+
+### 9. Images
+1. **Always use Next.js `<Image>`** not `<img>`
+2. **Local images:** Import from `assets/images/`
+   ```tsx
+   import LocalImage from "@/assets/images/local-image.jpg";
+
+   <Image src={LocalImage} alt="Description" placeholder="blur" />
+   ```
+3. **Remote:** Explicit `width`/`height`, configure `remotePatterns`
+4. **Responsive:** Use `fill` with relative positioning or `sizes`
+   ```tsx
+   <div className="relative h-64 w-full">
+     <Image src={LocalImage} alt="Description" fill className="object-cover" />
+   </div>
+   ```
+
+### 10. UI Components
+1. **shadcn/ui components:** Button, Card, Dialog, Drawer (Vaul), Input, Label, etc.
+2. **Carousel:** Use Embla Carousel React for image/content carousels
+3. **Animations:** Use tw-animate-css for CSS animations with Tailwind
+4. **Mobile:** Use Vaul for mobile-optimized drawers
+
+## Scope
+- **Files:** `**/*.{ts,tsx,css,md}`
+- **Exclude:** `node_modules`, `.next`, `dist`
