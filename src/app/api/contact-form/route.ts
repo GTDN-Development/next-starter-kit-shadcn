@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     });
 
     const mailOptions = {
-      from: process.env.MAIL_FROM_ADDRESS,
+      from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_ADDRESS}>`,
       to: process.env.FORM_RECIPIENT_EMAIL,
       subject: `New contact form message from ${name} ${surname}`,
       html: `
