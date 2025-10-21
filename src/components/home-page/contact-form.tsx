@@ -2,7 +2,7 @@
 
 import { useForm } from "@tanstack/react-form";
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "@/components/ui/link";
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircleIcon, AlertCircleIcon, Loader2Icon } from "lucide-react";
 import { legalLinks } from "@/config/legal-links";
 import { Field, FieldLabel, FieldDescription, FieldError, FieldGroup } from "@/components/ui/field";
+import { Turnstile, type TurnstileRef } from "@/components/turnstile/turnstile";
 
 import { cn } from "@/lib/utils";
 
@@ -55,6 +56,9 @@ const contactFormSchema = z.object({
   gdprConsent: z.boolean().refine((value) => value === true, {
     message: "You must agree to the processing of personal data.",
   }),
+  turnstileToken: z.string().min(1, {
+    message: "Please complete the verification.",
+  }),
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
@@ -65,6 +69,7 @@ export function ContactForm({ className, ...props }: React.ComponentProps<"div">
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
+  const turnstileRef = useRef<TurnstileRef>(null);
 
   const form = useForm({
     defaultValues: {
@@ -74,6 +79,7 @@ export function ContactForm({ className, ...props }: React.ComponentProps<"div">
       phone: "",
       message: "",
       gdprConsent: false,
+      turnstileToken: "",
     },
     validators: {
       onSubmit: contactFormSchema,
@@ -99,6 +105,7 @@ export function ContactForm({ className, ...props }: React.ComponentProps<"div">
             message: data.message || "Message sent successfully!",
           });
           form.reset();
+          turnstileRef.current?.reset();
         } else {
           setSubmitStatus({
             type: "error",
@@ -284,6 +291,24 @@ export function ContactForm({ className, ...props }: React.ComponentProps<"div">
               <AlertDescription>{submitStatus.message}</AlertDescription>
             </Alert>
           )}
+
+          <form.Field
+            name="turnstileToken"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <Turnstile
+                    ref={turnstileRef}
+                    onSuccess={(token: string) => field.handleChange(token)}
+                    onError={() => field.handleChange("")}
+                    onExpire={() => field.handleChange("")}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
             {isSubmitting && (

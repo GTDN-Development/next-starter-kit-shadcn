@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { verifyTurnstileToken, getClientIP } from "@/lib/turnstile";
 
 type ContactFormData = {
   name: string;
@@ -8,16 +9,28 @@ type ContactFormData = {
   phone: string;
   message: string;
   gdprConsent: boolean;
+  turnstileToken: string;
 };
 
 export async function POST(request: NextRequest) {
   try {
     const body: ContactFormData = await request.json();
-    const { name, surname, email, phone, message, gdprConsent } = body;
+    const { name, surname, email, phone, message, gdprConsent, turnstileToken } = body;
 
-    if (!name || !surname || !email || !phone || !message || !gdprConsent) {
+    if (!name || !surname || !email || !phone || !message || !gdprConsent || !turnstileToken) {
       return NextResponse.json(
         { error: "All fields are required and you must agree to the processing of personal data." },
+        { status: 400 }
+      );
+    }
+
+    // Verify Turnstile token
+    const clientIP = getClientIP(request);
+    const turnstileResult = await verifyTurnstileToken(turnstileToken, clientIP);
+
+    if (!turnstileResult.success) {
+      return NextResponse.json(
+        { error: turnstileResult.error || "Verification failed. Please try again." },
         { status: 400 }
       );
     }
