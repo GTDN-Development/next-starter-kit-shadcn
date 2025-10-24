@@ -5,7 +5,8 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
 
 ## Expertise
 - **Language:** TypeScript (strict mode)
-- **Framework:** Next.js (App Router)
+- **Framework:** Next.js 16 (App Router)
+- **React:** React 19.2
 - **UI:** shadcn/ui + Radix UI
 - **Icons:** Lucide React
 - **Styling:** Tailwind CSS v4 (CSS-First)
@@ -59,7 +60,7 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
    │   └── {page-specific/,shared}/
    ├── config/          # single source of truth for app configuration
    ├── data/
-   ├── lib/{utils,cn}/
+   ├── lib/{utils,cn,api}/
    ├── styles/{globals,themes,prose}.css
    └── types/
    ```
@@ -72,9 +73,9 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
    - Site metadata (title, description, SEO)
    - Social media links
    - Business details
-   
+
    **Important:** Always reference config files instead of hardcoding values across components.
-   
+
    ```tsx
    // config/contact.ts
    export const contactInfo = {
@@ -82,10 +83,10 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
      phone: "+1 (555) 123-4567",
      address: "123 Main St, City, State 12345"
    };
-   
+
    // components/footer.tsx
    import { contactInfo } from "@/config/contact";
-   
+
    export function Footer() {
      return (
        <footer>
@@ -97,15 +98,15 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
 
 2. **components/layout/ folder:** Layout-specific components that structure pages:
    - Navbar/Header components
-   - Footer components  
+   - Footer components
    - Sidebar components
    - Page wrappers and containers
    - Any component used primarily for page layout structure
-   
+
    ```tsx
    // components/layout/navbar.tsx
    import { navigationLinks } from "@/config/navigation";
-   
+
    export function Navbar() {
      return (
        <nav>
@@ -120,7 +121,18 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
    ```
 
 ### 4. Frameworks
-1. **Next.js:** Use `layout.tsx`, `page.tsx`, `loading.tsx`. Co-locate data fetching in Server Components. Add `'use client'` for Client Components.
+1. **Next.js 16:** Use `layout.tsx`, `page.tsx`, `loading.tsx`. Co-locate data fetching in Server Components. Add `'use client'` for Client Components.
+   - **Turbopack** is now the default bundler
+   - **Async params/searchParams:** Must use `await params`, `await searchParams` (no longer sync)
+   - **Async cookies/headers/draftMode:** Must use `await cookies()`, `await headers()`, `await draftMode()`
+   - **Proxy instead of Middleware:** Use `proxy.ts` instead of `middleware.ts` for request interception
+   - **Cache Components:** Use `"use cache"` directive for opt-in caching (replaces old implicit caching)
+   - **Custom Link Component:** Always use the custom `Link` component from `@/components/ui/link` instead of importing directly from `next/link`
+     ```tsx
+     import { Link } from "@/components/ui/link";
+
+     <Link href="/about">About Us</Link>
+     ```
 2. **shadcn/ui:** Use pre-built accessible components with Radix UI primitives. Customize via CSS variables and class variants.
    ```tsx
    import { Button } from "@/components/ui/button";
@@ -180,7 +192,7 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
      );
    }
    ```
-4. **Icons:** Use Lucide React for consistent iconography.
+4. **Icons:** Use Lucide React for consistent iconography. Alwais import inons with Icon suffix in the name.
    ```tsx
    import { ChevronRightIcon, UserIcon, SettingsIcon } from "lucide-react";
 
@@ -262,7 +274,7 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
      <section className="mt-8">Second section</section>
      <section className="mt-12">Third section</section>
    </div>
-   
+
    // ✅ Good - flex/grid with gap
    <div className="flex flex-col gap-4">
      <section>First section</section>
@@ -277,7 +289,7 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
    // ✅ Good - using size utility
    <SomeIcon className="size-4" />
    <div className="size-8 bg-blue-500" />
-   
+
    // ❌ Bad - separate width and height
    <SomeIcon className="w-4 h-4" />
    <div className="w-8 h-8 bg-blue-500" />
@@ -287,6 +299,10 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
 1. **Server:** Fetch in Server Components
 2. **Client:** Context API + useState
 3. **Theme:** Use `next-themes` for theme management. Use the existing `ThemeSwitcher` component in `@/components/layout/theme-switcher` which provides light/dark/system theme options with proper accessibility.
+4. **React 19.2 Features:**
+   - **View Transitions:** Animate elements during navigation with `<ViewTransition>`
+   - **`useEffectEvent`:** Extract non-reactive logic from Effects
+   - **`<Activity>`:** Render background activity while maintaining state
 
 ### 7. Accessibility
 1. Semantic HTML (`<nav>`, `<main>`, `<button>`)
@@ -299,6 +315,10 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
 
 ### 8. Forms
 1. **Validation:** TanStack Form + Zod for type-safe validation
+2. **Server Actions APIs:**
+   - **`updateTag()`:** Read-your-writes semantics - expire cache and refresh immediately
+   - **`revalidateTag()`:** Requires cacheLife profile as second argument (e.g., `revalidateTag('posts', 'max')`)
+   - **`refresh()`:** Refresh uncached data only
    ```tsx
    const schema = z.object({
      email: z.string().email("Invalid email"),
@@ -363,17 +383,23 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
 
 ### 9. Images
 1. **Always use Next.js `<Image>`** not `<img>`
-2. **Local images:** Import from `assets/images/`
+2. **Local images:** Import from `assets/images/` and use `StaticImage` component
    ```tsx
+   import { StaticImage } from "@/components/ui/static-image";
    import LocalImage from "@/assets/images/local-image.jpg";
 
-   <Image src={LocalImage} alt="Description" placeholder="blur" />
+   <StaticImage image={LocalImage} alt="Description" placeholder="blur" />
    ```
-3. **Remote:** Explicit `width`/`height`, configure `remotePatterns`
-4. **Responsive:** Use `fill` with relative positioning or `sizes`
+3. **Next.js 16 Image Changes:**
+   - Default `minimumCacheTTL` is now 4 hours (was 60s)
+   - Default `imageSizes` removed `16` (reduces srcset size)
+   - Default `qualities` changed to `[75]` (was `[1..100]`)
+   - Local images with query strings require `images.localPatterns` config
+4. **Remote:** Explicit `width`/`height`, configure `remotePatterns`
+5. **Responsive:** Use `fill` with relative positioning or `sizes`
    ```tsx
    <div className="relative h-64 w-full">
-     <Image src={LocalImage} alt="Description" fill className="object-cover" />
+     <StaticImage image={LocalImage} alt="Description" fill className="object-cover" />
    </div>
    ```
 
@@ -382,6 +408,7 @@ Expert full-stack developer specializing in modern, accessible web apps using Ty
 2. **Carousel:** Use Embla Carousel React for image/content carousels
 3. **Animations:** Use tw-animate-css for CSS animations with Tailwind
 4. **Mobile:** Use Vaul for mobile-optimized drawers
+5. **Performance:** Enhanced routing with layout deduplication and incremental prefetching
 
 ## Scope
 - **Files:** `**/*.{ts,tsx,css,md}`
