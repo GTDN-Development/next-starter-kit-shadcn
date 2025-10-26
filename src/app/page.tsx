@@ -10,9 +10,27 @@ import {
   HeroDescription,
   HeroTitle,
 } from "@/components/ui/hero";
-
-import CubeSvg from "@/assets/svgs/cube.svg";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import CubeSvg from "@/assets/svgs/cube.svg";
+import type { Metadata } from "next";
+import { site } from "@/config/site";
+
+export const metadata: Metadata = {
+  title: site.defaultTitle,
+  description: site.defaultDescription,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: site.defaultTitle,
+    description: site.defaultDescription,
+    url: site.url,
+  },
+  twitter: {
+    title: site.defaultTitle,
+    description: site.defaultDescription,
+  },
+};
 
 export default function Page() {
   return (
@@ -23,14 +41,12 @@ export default function Page() {
         </HeroBackground>
         <HeroContent>
           <CubeSvg className="mx-auto h-auto w-20 dark:invert" />
-          <HeroTitle>Home page</HeroTitle>
-          <HeroDescription>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. A, fugit?
-          </HeroDescription>
+          <HeroTitle>{site.defaultTitle}</HeroTitle>
+          <HeroDescription>{site.defaultDescription}</HeroDescription>
           <HeroActions>
             <Button size="lg">Learn more</Button>
             <Button size="lg" variant="secondary" asChild>
-              <a href="https://ui.shadcn.com/" target="_blank" rel="noopenner noreferrer">
+              <a href="https://ui.shadcn.com/" target="_blank" rel="noopener noreferrer">
                 Shadcn ui docs
               </a>
             </Button>

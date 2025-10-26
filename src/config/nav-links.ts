@@ -1,3 +1,5 @@
+import { legalLinksArray } from "./legal-links";
+
 export type NavigationLink = {
   name: string;
   href: string;
@@ -15,34 +17,9 @@ export const navLinks = {
     name: "Home",
     href: "/",
   },
-  about: {
-    name: "About",
-    href: "/about",
-  },
-  services: {
-    name: "Services",
-    items: [
-      {
-        name: "Web Development",
-        href: "/services/web-development",
-      },
-      {
-        name: "Mobile Apps",
-        href: "/services/mobile-apps",
-      },
-      {
-        name: "Consulting",
-        href: "/services/consulting",
-      },
-    ],
-  },
-  blog: {
-    name: "Blog",
-    href: "/blog",
-  },
-  contact: {
-    name: "Contact",
-    href: "/contact",
+  legalLinks: {
+    name: "Legal links",
+    items: [...legalLinksArray],
   },
 } as const satisfies Record<string, NavigationItem>;
 

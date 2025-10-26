@@ -243,7 +243,7 @@ export function ContactForm({ className, ...props }: React.ComponentProps<"div">
                     onChange={(e) => field.handleChange(e.target.value)}
                     aria-invalid={isInvalid}
                     placeholder="Write your message or inquiry..."
-                    rows={6}
+                    rows={4}
                   />
                   <FieldDescription>Describe how we can help you.</FieldDescription>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}

@@ -11,6 +11,8 @@ import { CookieConsentBanner } from "@/components/cookies/cookie-consent-banner"
 import { CookieSettingsDialog } from "@/components/cookies/cookie-settings-dialog";
 import { CookieErrorBoundary } from "@/components/cookies/cookie-error-boundary";
 
+import { site } from "@/config/site";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,11 +34,37 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "gtdn.online",
-    template: "%s | gtdn.online",
+    default: site.defaultTitle,
+    template: `%s | ${site.name}`,
   },
-  description: "This app is created by gtdn.online",
-  authors: [{ name: "gtdn.online", url: "https://www.gtdn.online/" }],
+  description: site.defaultDescription,
+  metadataBase: new URL(site.url),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    title: site.defaultTitle,
+    description: site.defaultDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.defaultTitle,
+    description: site.defaultDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  authors: [{ name: "gtdn.online", url: "https://www.gtdn.online" }],
 };
 
 export default function RootLayout({
@@ -46,7 +74,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang={site.locale}
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
@@ -64,7 +92,7 @@ export default function RootLayout({
           <Toaster />
         </Providers>
 
-        {/*Load scripts that are controlled by our cookie consent settings.*/}
+        {/* Load scripts that are controlled by our cookie consent settings. */}
         <Suspense fallback={null}>
           <ThirdPartyScripts />
         </Suspense>
@@ -77,7 +105,7 @@ function TailwindScreen() {
   if (process.env.NODE_ENV === "production") return null;
 
   return (
-    <div className="fixed bottom-16 left-5 z-99999 flex size-9 items-center justify-center rounded-full bg-[#282828] text-xs font-bold text-[#fff] uppercase inset-ring-1 inset-ring-current/15 dark:bg-black">
+    <div className="fixed bottom-16 left-5 z-99999 flex size-9 items-center justify-center rounded-full bg-[#282828] text-xs font-bold text-white uppercase inset-ring-1 inset-ring-current/15 dark:bg-black">
       <div className="sm:hidden">-</div>
       <div className="hidden sm:block md:hidden">sm</div>
       <div className="hidden md:block lg:hidden">md</div>
