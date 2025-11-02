@@ -25,10 +25,6 @@ export const metadata: Metadata = {
     title: `${title} | ${site.name}`,
     description,
   },
-  robots: {
-    index: false,
-    follow: true,
-  },
 };
 
 export default function Page() {
