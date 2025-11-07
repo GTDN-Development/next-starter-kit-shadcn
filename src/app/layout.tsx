@@ -76,9 +76,9 @@ export default function RootLayout({
     <html
       lang={site.locale}
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable}`}
+      className={`scroll-pt-16 scroll-smooth ${geistSans.variable} ${geistMono.variable}`}
     >
-      <body className="scroll-pt-16 scroll-smooth font-sans antialiased">
+      <body className="font-sans antialiased">
         <Providers>
           <div className="relative isolate">
             <LayoutCentered>{children}</LayoutCentered>
