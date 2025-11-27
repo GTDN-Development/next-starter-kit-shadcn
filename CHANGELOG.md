@@ -2,6 +2,7 @@
 
 ## 25-11-27
 
+- Updated all packages to latest versions
 - Add a new `spinner` component
 - Add `format` fommand into the `package.json`
 - Contact form updates:
