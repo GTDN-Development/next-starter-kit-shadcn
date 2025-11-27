@@ -74,9 +74,9 @@ const features: Feature[] = [
   },
 ];
 
-export function FeaturesSection(props: React.ComponentProps<"section">) {
+export function FeaturesBlock(props: React.ComponentProps<"div">) {
   return (
-    <section {...props}>
+    <div {...props}>
       <h2 className="text-2xl font-semibold sm:text-3xl">Built-in Features</h2>
       <div className="mt-8 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {features.map((feature) => (
@@ -91,6 +91,6 @@ export function FeaturesSection(props: React.ComponentProps<"section">) {
           </Card>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

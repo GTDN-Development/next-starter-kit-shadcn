@@ -3,26 +3,18 @@ import nodemailer from "nodemailer";
 import { verifyTurnstileToken, getClientIP } from "@/lib/turnstile";
 import { formatEmailTimestamp } from "@/lib/utils";
 
-type ContactFormData = {
-  name: string;
-  surname: string;
+type NewsletterFormData = {
   email: string;
-  phone: string;
-  message: string;
-  gdprConsent: boolean;
   turnstileToken: string;
 };
 
 export async function POST(request: NextRequest) {
   try {
-    const body: ContactFormData = await request.json();
-    const { name, surname, email, phone, message, gdprConsent, turnstileToken } = body;
+    const body: NewsletterFormData = await request.json();
+    const { email, turnstileToken } = body;
 
-    if (!name || !surname || !email || !phone || !message || !gdprConsent || !turnstileToken) {
-      return NextResponse.json(
-        { error: "All fields are required and you must agree to the processing of personal data." },
-        { status: 400 }
-      );
+    if (!email || !turnstileToken) {
+      return NextResponse.json({ error: "Email and verification are required." }, { status: 400 });
     }
 
     // Verify Turnstile token
@@ -54,38 +46,32 @@ export async function POST(request: NextRequest) {
     const mailOptions = {
       from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_ADDRESS}>`,
       to: process.env.FORM_RECIPIENT_EMAIL,
-      subject: `New contact form message from ${name} ${surname}`,
+      subject: `New newsletter subscription - ${email}`,
       html: `
-        <h2>New contact form message</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Surname:</strong> ${surname}</p>
+        <h2>New newsletter subscription</h2>
         <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br>")}</p>
-        <p><em>Sent: ${formatEmailTimestamp()}</em></p>
+        <p><em>Subscribed: ${formatEmailTimestamp()}</em></p>
       `,
       text: `
-          New contact form message
+          New newsletter subscription
 
-          Name: ${name}
-          Surname: ${surname}
           Email: ${email}
-          Phone: ${phone}
-          Message: ${message}
 
-          Sent: ${formatEmailTimestamp()}
+          Subscribed: ${formatEmailTimestamp()}
       `,
     };
 
     // Send email
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ message: "Message sent successfully!" }, { status: 200 });
-  } catch (error) {
-    console.error("Error sending email:", error);
     return NextResponse.json(
-      { error: "An error occurred while sending the message. Please try again later." },
+      { message: "Successfully subscribed to newsletter!" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error processing newsletter subscription:", error);
+    return NextResponse.json(
+      { error: "An error occurred during subscription. Please try again later." },
       { status: 500 }
     );
   }

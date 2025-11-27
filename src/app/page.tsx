@@ -12,7 +12,9 @@ import {
 import CubeSvg from "@/assets/svgs/cube.svg";
 import type { Metadata } from "next";
 import { site } from "@/config/site";
-import { FeaturesSection } from "@/components/home-page/features-section";
+import { FeaturesBlock } from "@/components/home-page/features-block";
+import { NewsletterCta } from "@/components/newsletter/newsletter-cta";
+import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
   title: site.defaultTitle,
@@ -53,9 +55,23 @@ export default function Page() {
         </HeroContent>
       </Hero>
 
-      <Container className="pb-24">
-        <FeaturesSection />
-      </Container>
+      <div className="space-y-12 pb-24 md:space-y-20">
+        <Container asChild>
+          <section>
+            <FeaturesBlock />
+          </section>
+        </Container>
+
+        <Container>
+          <Separator />
+        </Container>
+
+        <Container asChild>
+          <section>
+            <NewsletterCta />
+          </section>
+        </Container>
+      </div>
     </div>
   );
 }

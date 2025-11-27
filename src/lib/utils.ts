@@ -22,6 +22,14 @@ export function chain(...callbacks: any[]): (...args: any[]) => void {
   };
 }
 
+/**
+ * Formats current date and time for email timestamps
+ * @returns Formatted datetime string (e.g., "2024-12-25 15:45")
+ */
+export function formatEmailTimestamp(): string {
+  return new Date().toISOString().slice(0, 16).replace("T", " ");
+}
+
 /** Creates a delay in milliseconds */
 export function wait(duration: number) {
   return new Promise((resolve) => setTimeout(resolve, duration));
